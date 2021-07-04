@@ -51,3 +51,20 @@ Safari
 5. Click the dropdown until you find www.roblox.com. 
 6. Your cookie is the value assigned to the key named .ROBLOSECURITY. Copy it api_key:
 ```
+
+Finanaly, create entries is lovelace:
+```
+type: entities
+entities:
+  - type: attribute
+    entity: sensor.roblox_XXXXX
+    attribute: game  
+```    
+or
+```
+type: custom:kb-steam-card
+entities:
+  - sensor.roblox_XXXX
+  - sensor.roblox_YYYY
+  - sensor.roblox_ZZZZ
+```  

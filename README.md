@@ -13,12 +13,12 @@ In configuration.yaml add under sensors:
     accounts:
       - 'UserId1'
       - 'UserId2'
-      - 'UserId3'
+      - 'UserIdN'
  ```
 
-UserId1 are the roblox userids you want to track. On roblox.com, search for a user. Click on the and their profile web page should show:
+UserIds are the roblox userids you want to track. On roblox.com, search for a user. Click on the and their profile web page should show:
 https://www.roblox.com/users/XXXXXXX/profile
-and XXXXXXX is their UserID
+and XXXXXXX is their UserID. You can track as many as you want. The sensor will check an ID every 2 minutes, so if you have 2 Ids, it will take 4 minutes to cycle through them.
 
 api_key is trying to get. It is a cookie from a logged in roblox account. Best to use a dummy account incase credentials are stolen. Not sure how often you need to get a new cookie.
 

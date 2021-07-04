@@ -52,7 +52,7 @@ Safari
 6. Your cookie is the value assigned to the key named .ROBLOSECURITY. Copy it api_key:
 ```
 
-Finanaly, create entries is lovelace:
+Finanaly, create entries in lovelace:
 ```
 type: entities
 entities:

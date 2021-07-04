@@ -1,7 +1,7 @@
 # Roblox-Homeassistant
 Roblox Sensor For Homeassistant
 Basically an editted version of the built-in steam-online integration
-Because it largely clones the steam-online integration, recomend using the custom steam card lovelace card with it:
+Because it largely clones the steam-online integration, you can use the custom steam card lovelace card with it:
 https://github.com/Kibibit/kb-steam-card
 
 Setup:

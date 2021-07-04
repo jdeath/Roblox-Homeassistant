@@ -7,6 +7,8 @@ Because it largely clones the steam-online integration, you can use the custom s
 https://github.com/Kibibit/kb-steam-card
 
 Setup:
+copy "roblox-online" folder into /config/custom_components/ and restart homeassistant
+
 In configuration.yaml, add an entry under sensors:
 
 ```

@@ -1,11 +1,13 @@
 # Roblox-Homeassistant
 Roblox Sensor For Homeassistant
-Basically an editted version of the built-in steam-online integration
+
+Basically an editted version of the built-in steam-online integration, but works for roblox
+
 Because it largely clones the steam-online integration, you can use the custom steam card lovelace card with it:
 https://github.com/Kibibit/kb-steam-card
 
 Setup:
-In configuration.yaml add under sensors:
+In configuration.yaml, add an entry under sensors:
 
 ```
 - platform: roblox_online
@@ -16,13 +18,14 @@ In configuration.yaml add under sensors:
       - 'UserIdN'
  ```
 
-UserIds are the roblox userids you want to track. On roblox.com, search for a user. Click on the and their profile web page should show:
+UserIds are the roblox userids you want to track. On roblox.com, search for a user. Click on their profile web page, and the URL should be:
 https://www.roblox.com/users/XXXXXXX/profile
-and XXXXXXX is their UserID. You can track as many as you want. The sensor will check an ID every 2 minutes, so if you have 2 Ids, it will take 4 minutes to cycle through them.
 
-api_key is trying to get. It is a cookie from a logged in roblox account. Best to use a dummy account incase credentials are stolen. Not sure how often you need to get a new cookie.
+XXXXXXX is their UserID. You can track as many as you want. The sensor will check an ID every 2 minutes, so if you have 3 Ids, it will take 6 minutes to cycle through them.
 
-Chrome
+api_key is tricky to get. It is a cookie from a logged in roblox account. Best to use a dummy account in case these credentials are stolen. Not sure how often you need to get a new cookie.
+
+Chrome and the latest Edge
 ```
 1. Click the arrow icon on the right-hand side of the toolbar. 
 2. Go to More Tools. 

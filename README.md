@@ -1,6 +1,8 @@
 # Roblox-Homeassistant
 Roblox Sensor For Homeassistant
 Basically an editted version of the built-in steam-online integration
+Because it largely clones the steam-online integration, recomend using the custom steam card lovelace card with it:
+https://github.com/Kibibit/kb-steam-card
 
 Setup:
 In configuration.yaml add under sensors:
@@ -13,8 +15,14 @@ In configuration.yaml add under sensors:
       - 'UserId2'
       - 'UserId3'
  ```
-Where the api_key is a cookie from a logged in roblox account. This is a little tricky to get:
- Chrome
+
+UserId1 are the roblox userids you want to track. On roblox.com, search for a user. Click on the and their profile web page should show:
+https://www.roblox.com/users/XXXXXXX/profile
+and XXXXXXX is their UserID
+
+api_key is trying to get. It is a cookie from a logged in roblox account. Best to use a dummy account incase credentials are stolen. Not sure how often you need to get a new cookie.
+
+Chrome
 ```
 1. Click the arrow icon on the right-hand side of the toolbar. 
 2. Go to More Tools. 

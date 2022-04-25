@@ -147,7 +147,7 @@ class robloxSensor(Entity):
             self._placeId = None
     
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         """Return the state attributes."""
         attr = {}
         if self._game is not None:

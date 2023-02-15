@@ -1,5 +1,5 @@
 {
-  "name": "roblox_online",
+  "name": "roblox",
   "domains": ["sensor"],
   "iot_class": "Cloud Polling",
   "render_readme": true,

@@ -31,7 +31,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 )
 
 
-BASE_INTERVAL = timedelta(minutes=5)
+BASE_INTERVAL = timedelta(minutes=1)
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
@@ -108,10 +108,8 @@ class robloxSensor(Entity):
         try:
             r = requests.get("https://www.roblox.com/profile?userId=" + self._account)
             data = r.json()
-
             self._name = data["Username"]
             self._avatar = data["AvatarUri"]
-
             cookies_dict = {".ROBLOSECURITY": self._robloxod}
 
             headers = {
@@ -124,7 +122,6 @@ class robloxSensor(Entity):
                     self._account,
                 ],
             }
-
             response = requests.post(
                 "https://presence.roblox.com/v1/presence/users",
                 headers=headers,
@@ -134,22 +131,22 @@ class robloxSensor(Entity):
             data = response.json()
             userPresence = data.get("userPresences")[0]
             self._game_id = userPresence.get("gameId")
+            
             self._last_online = userPresence.get("lastOnline")
             self._placeId = userPresence.get("placeId")
-
-            isOnline = userPresence.get("userPresenceType") > 0
-
+            self._game = userPresence.get("lastLocation")
+            
+            isOnline = int(userPresence.get("userPresenceType")) > 0
             if isOnline:
-                self._state = "online"
-                self._game = userPresence.get("lastLocation")
+                self._state = "online"    
             else:
                 self._state = "offline"
                 self._game = "offline"
-
+            
             if self._placeId is not None:
                 r = requests.get(
                     "https://thumbnails.roblox.com/v1/assets?assetIds="
-                    + str(placeId)
+                    + str(self._placeId)
                     + "&size=396x216&format=Png&isCircular=false"
                 )
                 data = r.json()

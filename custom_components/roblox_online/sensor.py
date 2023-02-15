@@ -31,7 +31,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 )
 
 
-BASE_INTERVAL = timedelta(minutes=1)
+BASE_INTERVAL = timedelta(minutes=5)
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):

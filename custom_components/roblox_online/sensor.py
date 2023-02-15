@@ -31,7 +31,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 )
 
 
-BASE_INTERVAL = timedelta(minutes=5)
+BASE_INTERVAL = timedelta(minutes=1)
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
@@ -109,9 +109,25 @@ class robloxSensor(Entity):
             r = requests.get("https://www.roblox.com/profile?userId=" + self._account)
             data = r.json()
             self._name = data["Username"]
-            self._avatar = data["AvatarUri"]
-            cookies_dict = {".ROBLOSECURITY": self._robloxod}
+            #self._avatar = data["AvatarUri"]
+            
+            # Get Headshot
+            headers = {
+                'accept': 'application/json',
+            }
 
+            params = {
+                'userIds': self._account,
+                'size': '48x48',
+                'format': 'Png',
+                'isCircular': 'false',
+            }
+
+            response = requests.get('https://thumbnails.roblox.com/v1/users/avatar-headshot', params=params, headers=headers)
+            self._avatar = response.json().get('data')[0].get('imageUrl')
+            
+            # Get Presence
+            cookies_dict = {".ROBLOSECURITY": self._robloxod}
             headers = {
                 "accept": "application/json",
                 "Content-Type": "application/json",

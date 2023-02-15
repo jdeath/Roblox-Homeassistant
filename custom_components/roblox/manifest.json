@@ -1,0 +1,8 @@
+{
+  "domain": "roblox_online",
+  "name": "Roblox",
+  "version": "1.0.0",
+  "documentation": "https://www.home-assistant.io/integrations/roblox_online",
+  "requirements": [],
+  "codeowners": []
+}

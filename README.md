@@ -23,7 +23,12 @@ In configuration.yaml, add an entry under sensors:
 UserIds are the roblox userids you want to track. On roblox.com, search for a user. Click on their profile web page, and the URL should be:
 https://www.roblox.com/users/XXXXXXX/profile
 
-XXXXXXX is their UserID. You can track as many as you want. The sensor will check an ID every 2 minutes, so if you have 3 Ids, it will take 6 minutes to cycle through them.
+XXXXXXX is their UserID. You can track as many as you want. 
+
+The sensor will check an ID every 2 minutes, so if you have 3 Ids, it will take 6 minutes to cycle through them. You can change line 34 of sensor.py to check quicker if you want:
+```
+BASE_INTERVAL = timedelta(minutes=.25)
+```
 
 api_key is tricky to get. It is a cookie from a logged in roblox account. Best to use a dummy account in case these credentials are stolen. Not sure how often you need to get a new cookie.
 

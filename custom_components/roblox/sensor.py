@@ -31,7 +31,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 )
 
 
-BASE_INTERVAL = timedelta(minutes=5)
+BASE_INTERVAL = timedelta(minutes=2)
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
@@ -82,7 +82,8 @@ class robloxSensor(Entity):
         self._game_image_header = None
         self._game_image_main = None
         self._placeId = None
-
+        self._universeId = None
+        
     @property
     def name(self):
         """Return the name of the sensor."""
@@ -151,6 +152,7 @@ class robloxSensor(Entity):
             self._last_online = userPresence.get("lastOnline")
             self._placeId = userPresence.get("placeId")
             self._game = userPresence.get("lastLocation")
+            self._universeId = userPresence.get("universeId")
             
             isOnline = int(userPresence.get("userPresenceType")) > 0
             if isOnline:
@@ -159,15 +161,11 @@ class robloxSensor(Entity):
                 self._state = "offline"
                 self._game = "offline"
             
-            if self._placeId is not None:
-                r = requests.get(
-                    "https://thumbnails.roblox.com/v1/assets?assetIds="
-                    + str(self._placeId)
-                    + "&size=396x216&format=Png&isCircular=false"
-                )
+            if self._universeId is not None:
+                r = requests.get('https://thumbnails.roblox.com/v1/games/multiget/thumbnails?universeIds=' + str(self._universeId) + '&countPerUniverse=1&defaults=true&size=768x432&format=Png&isCircular=false')
                 data = r.json()
-                self._game_image_header = data["data"][0]["imageUrl"]
-                self._game_image_main = data["data"][0]["imageUrl"]
+                self._game_image_header = data['data'][0]['thumbnails'][0]['imageUrl']
+                self._game_image_main = data['data'][0]['thumbnails'][0]['imageUrl']
                 # self._gameurl = 'https://www.roblox.com/games/' + str(placeId)
         except:
             self._game = None
@@ -181,6 +179,7 @@ class robloxSensor(Entity):
             self._game_image_main = None
             self._gameurl = None
             self._placeId = None
+            self._universeId = None
 
     @property
     def extra_state_attributes(self):

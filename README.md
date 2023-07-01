@@ -25,7 +25,7 @@ https://www.roblox.com/users/XXXXXXX/profile
 
 XXXXXXX is their UserID. You can track as many as you want. 
 
-The sensor will check an ID every 2 minutes, so if you have 3 Ids, it will take 6 minutes to cycle through them. You can change line 34 of sensor.py to check quicker if you want:
+The sensor will check an ID every 2 minutes, so if you have 3 Ids, it will take 6 minutes to cycle through them. You can change line 34 of sensor.py to check quicker if you want (below is changed for .25 minutes):
 ```
 BASE_INTERVAL = timedelta(minutes=.25)
 ```

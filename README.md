@@ -3,6 +3,9 @@ Roblox Sensor For Homeassistant
 
 Basically an editted version of the built-in steam-online integration, but works for roblox
 
+You must edit line 29 of sensor.py and change to the address of your home assistant yourIP = "address.example.com"
+You must put 1x1.png in config/www/
+
 Because it largely clones the steam-online integration, you can use the custom steam card lovelace card with it:
 https://github.com/Kibibit/kb-steam-card
 

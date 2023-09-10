@@ -25,6 +25,8 @@ In configuration.yaml, add an entry under sensors:
       - 'UserIdN'
  ```
 
+hassip: should be replaced with your homeassistant domain name. This is so the webserver can provide an empty image when no game is being played. You must also put the 1x1.png if your config/www/ directory. I use a white 1x1.png, but you could find a transparent png or anything else you want.
+
 UserIds are the roblox userids you want to track. On roblox.com, search for a user. Click on their profile web page, and the URL should be:
 https://www.roblox.com/users/XXXXXXX/profile
 

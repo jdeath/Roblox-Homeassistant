@@ -15,9 +15,15 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.event import track_time_interval
 from homeassistant.util.dt import utc_from_timestamp
 
+import json
+import asyncio
+from aiohttp import ClientError, ClientResponseError
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
+
 _LOGGER = logging.getLogger(__name__)
 
 CONF_ACCOUNTS = "accounts"
+CONF_HASSIP = "hassip"
 
 ICON = "mdi:robot-outline"
 
@@ -27,44 +33,35 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
         vol.Required(CONF_API_KEY): cv.string,
         vol.Required(CONF_ACCOUNTS, default=[]): vol.All(cv.ensure_list, [cv.string]),
+        vol.Required(CONF_HASSIP): cv.string,
     }
 )
 
 
 BASE_INTERVAL = timedelta(minutes=2)
+SCAN_INTERVAL = timedelta(minutes=2)
 
-
-def setup_platform(hass, config, add_entities, discovery_info=None):
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
     """Set up the roblox platform."""
 
     roblox_cookie = config.get(CONF_API_KEY)
+    ip_address = config.get(CONF_HASSIP)
     # Initialize robloxmods app list before creating sensors
     # to benefit from internal caching of the list.
 
     entities = [
-        robloxSensor(account, roblox_cookie) for account in config.get(CONF_ACCOUNTS)
+        robloxSensor(hass,account, ip_address,roblox_cookie) for account in config.get(CONF_ACCOUNTS)
     ]
     if not entities:
         return
-    add_entities(entities, True)
-
-    # Only one sensor update once every 60 seconds to avoid
-    # flooding roblox and getting disconnected.
-    entity_next = 0
-
-    @callback
-    def do_update(time):
-        nonlocal entity_next
-        entities[entity_next].async_schedule_update_ha_state(True)
-        entity_next = (entity_next + 1) % len(entities)
-
-    track_time_interval(hass, do_update, BASE_INTERVAL)
+        
+    async_add_entities(entities, True)
 
 
 class robloxSensor(Entity):
     """A class for the roblox account."""
 
-    def __init__(self, account, robloxod):
+    def __init__(self, hass, account,ip_address, robloxod):
         """Initialize the sensor."""
         self._robloxod = robloxod
         self._account = account
@@ -83,6 +80,8 @@ class robloxSensor(Entity):
         self._game_image_main = None
         self._placeId = None
         self._universeId = None
+        self._ip_address = ip_address
+        self.hass = hass
         
     @property
     def name(self):
@@ -102,14 +101,19 @@ class robloxSensor(Entity):
     @property
     def should_poll(self):
         """Turn off polling, will do ourselves."""
-        return False
+        return True
 
-    def update(self):
+    async def async_update(self):
         """Update device state."""
-        try:
-            r = requests.get("https://www.roblox.com/profile?userId=" + self._account)
-            data = r.json()
+        
+        
+        try:        
+            session = async_get_clientsession(self.hass)
+        
+            resp = await session.get("https://www.roblox.com/profile?userId=" + self._account)
+            data = await resp.json()
             self._name = data["Username"]
+            
             #self._avatar = data["AvatarUri"]
             
             # Get Headshot
@@ -123,9 +127,10 @@ class robloxSensor(Entity):
                 'format': 'Png',
                 'isCircular': 'false',
             }
-
-            response = requests.get('https://thumbnails.roblox.com/v1/users/avatar-headshot', params=params, headers=headers)
-            self._avatar = response.json().get('data')[0].get('imageUrl')
+            
+            resp = await session.get('https://thumbnails.roblox.com/v1/users/avatar-headshot', params=params, headers=headers)
+            data = await resp.json()
+            self._avatar = data.get('data')[0].get('imageUrl')
             
             # Get Presence
             cookies_dict = {".ROBLOSECURITY": self._robloxod}
@@ -139,13 +144,15 @@ class robloxSensor(Entity):
                     self._account,
                 ],
             }
-            response = requests.post(
+            
+            resp = await session.post(
                 "https://presence.roblox.com/v1/presence/users",
                 headers=headers,
                 json=json_data,
                 cookies=cookies_dict,
             )
-            data = response.json()
+            data = await resp.json()
+            
             userPresence = data.get("userPresences")[0]
             self._game_id = userPresence.get("gameId")
             
@@ -162,8 +169,9 @@ class robloxSensor(Entity):
                 self._game = "offline"
             
             if self._universeId is not None:
-                r = requests.get('https://thumbnails.roblox.com/v1/games/multiget/thumbnails?universeIds=' + str(self._universeId) + '&countPerUniverse=1&defaults=true&size=768x432&format=Png&isCircular=false')
-                data = r.json()
+                resp = await session.get('https://thumbnails.roblox.com/v1/games/multiget/thumbnails?universeIds=' + str(self._universeId) + '&countPerUniverse=1&defaults=true&size=768x432&format=Png&isCircular=false')
+                data = await resp.json()
+                
                 self._game_image_header = data['data'][0]['thumbnails'][0]['imageUrl']
                 self._game_image_main = data['data'][0]['thumbnails'][0]['imageUrl']
                 # self._gameurl = 'https://www.roblox.com/games/' + str(placeId)
@@ -190,10 +198,14 @@ class robloxSensor(Entity):
         if self._game_id is not None:
             attr["game_id"] = self._game_id
             attr["place_id"] = self._placeId
+            attr["universe_id"] = self._universeId
             # game_url = f"{roblox_API_URL}{self._game_id}/"
             attr["game_image_header"] = self._game_image_header
             attr["game_image_main"] = self._game_image_main
-
+        else:
+            attr["game_image_header"] = "https://" + self._ip_address + "/local/1x1.png"
+            attr["game_image_main"] = "https://" + self._ip_address + "/local/1x1.png"
+            
         if self._last_online is not None:
             attr["last_online"] = self._last_online
 

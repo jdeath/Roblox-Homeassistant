@@ -32,10 +32,12 @@ https://www.roblox.com/users/XXXXXXX/profile
 
 XXXXXXX is their UserID. You can track as many as you want. 
 
-The sensor will check an ID every 2 minutes, so if you have 3 Ids, it will take 6 minutes to cycle through them. You can change line 34 of sensor.py to check quicker if you want (below is changed for .25 minutes):
+The sensor will check each ID every 2 minutes. You can change line 41 and 42 of sensor.py to check quicker if you want (below is changed for .25 minutes):
 ```
 BASE_INTERVAL = timedelta(minutes=.25)
+SCAN_INTERVAL = timedelta(minutes=.25)
 ```
+Note, an older version of the integration stepped the sensors at this rate. This new version updates every sensor at this rate.
 
 api_key is tricky to get. It is a cookie from a logged in roblox account. Best to use a dummy account in case these credentials are stolen. Not sure how often you need to get a new cookie.
 

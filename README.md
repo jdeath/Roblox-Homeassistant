@@ -3,7 +3,7 @@ Roblox Sensor For Homeassistant
 
 Basically an editted version of the built-in steam-online integration, but works for roblox
 
-Breaking change:
+**Breaking change:**
 You must put 1x1.png in config/www/
 You must add your homeassistant domain name in the config
 

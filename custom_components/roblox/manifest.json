@@ -3,6 +3,7 @@
   "name": "Roblox",
   "version": "1.0.0",
   "documentation": "https://github.com/jdeath/Roblox-Homeassistant/",
+  "issue_tracker": "https://github.com/jdeath/Roblox-Homeassistant/issues",
   "requirements": [],
-  "codeowners": []
+  "codeowners": ["@jdeath"]
 }

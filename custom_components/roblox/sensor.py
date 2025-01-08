@@ -110,11 +110,10 @@ class robloxSensor(Entity):
         try:        
             session = async_get_clientsession(self.hass)
         
-            #resp = await session.get("https://www.roblox.com/profile?userId=" + self._account)
-            #data = await resp.json()
-            #self._name = data["Username"]
-            self._name = self._account
-            
+            resp = await session.get("https://users.roblox.com/v1/users/" + self._account)
+            data = await resp.json()
+            self._name = data["displayName"]
+           
             
             #self._avatar = data["AvatarUri"]
             

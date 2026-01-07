@@ -39,7 +39,7 @@ SCAN_INTERVAL = timedelta(minutes=.25)
 ```
 Note, an older version of the integration stepped the sensors at this rate. This new version updates every sensor at this rate.
 
-api_key is tricky to get. It is a cookie from a logged in roblox account. Best to use a dummy account in case these credentials are stolen. Not sure how often you need to get a new cookie.
+api_key is tricky to get. It is a cookie from a logged in roblox account. Best to use a dummy account in case these credentials are stolen. Not sure how often you need to get a new cookie. If the cookie expires, the integration will no longer display the game the user is playing. Online/offline status as the avatar will continue to be updated even if the cookie is expired.
 
 Chrome and the latest Edge
 ```
